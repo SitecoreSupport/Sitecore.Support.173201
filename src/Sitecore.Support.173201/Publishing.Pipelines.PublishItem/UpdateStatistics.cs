@@ -1,0 +1,59 @@
+﻿namespace Sitecore.Support.Publishing.Pipelines.PublishItem
+{
+  using System;
+  using Sitecore.Configuration;
+  using Sitecore.Data;
+  using Sitecore.Diagnostics;
+  using Sitecore.Publishing;
+  using Sitecore.Publishing.Pipelines.PublishItem;
+  using Sitecore.SecurityModel;
+  using Sitecore.Support.Extensions;
+
+  [UsedImplicitly]
+  public class UpdateStatistics : PublishItemProcessor
+  {
+    [NotNull]
+    public static ID FirstPublishedFieldID { get; } = GetIdSetting("Publishing.FirstPublishedDateFieldID", defaultValue: "{C27B433F-5537-44A0-9069-B83AE2E6D99C}");
+
+    [NotNull]
+    public static ID LastPublishedFieldID { get; } = GetIdSetting("Publishing.LastPublishedDateFieldID", defaultValue: "{224EEF10-88F6-4E20-9761-E167A15DD05F}");
+
+    public override void Process(PublishItemContext context)
+    {
+      Assert.ArgumentNotNull(context, nameof(context));
+
+      var result = context.Action;
+      if (result == null)
+      {
+        return;
+      }
+
+      using (new SecurityDisabler())
+      {
+        var sourceItem = context.PublishHelper.GetSourceItem(context.ItemId);
+        if (sourceItem == null)
+        {
+          return;
+        }
+
+        var utcNow = DateUtil.ToIsoDate(DateTime.UtcNow);
+        var targetItem = context.PublishHelper.GetTargetItem(context.ItemId);
+        sourceItem.Editing.BeginEdit();
+        if (string.IsNullOrEmpty(sourceItem[FirstPublishedFieldID]))
+        {
+          sourceItem[FirstPublishedFieldID] = targetItem?[FirstPublishedFieldID].EmptyToNull() ?? targetItem?[FieldIDs.Created].EmptyToNull() ?? utcNow;
+        }
+
+        sourceItem[LastPublishedFieldID] = utcNow;
+        sourceItem.Editing.EndEdit();
+      }
+    }
+
+    [NotNull]
+    private static ID GetIdSetting([NotNull] string settingName, [NotNull] string defaultValue)
+    {
+      ID result;
+      return ID.TryParse(Settings.GetSetting(settingName), out result) ? result : new ID(defaultValue);
+    }
+  }
+}
