@@ -33,13 +33,13 @@
           return;
         }
         
-        var targetItem = context.PublishHelper.GetTargetItem(context.ItemId);
         if (!string.IsNullOrEmpty(sourceItem[FirstPublishedFieldID]))
         {
           return;
         }
 
         sourceItem.Editing.BeginEdit();
+        var targetItem = context.PublishHelper.GetTargetItem(context.ItemId);
         sourceItem[FirstPublishedFieldID] = targetItem?[FirstPublishedFieldID].EmptyToNull() ?? targetItem?[FieldIDs.Created].EmptyToNull() ?? DateUtil.ToIsoDate(DateTime.UtcNow);
         sourceItem.Editing.EndEdit();
       }
