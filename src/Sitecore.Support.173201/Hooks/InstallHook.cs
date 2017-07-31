@@ -30,28 +30,27 @@
           title: "Published First",
           sortorder: "1000",
           statisticsSection: statisticsSection);
+
+        RemoveItem(
+          itemName: "__Published Last",
+          statisticsSection: statisticsSection);
       }
     }
 
-    private static void EnsureItem(ID itemId, string itemName, string title, string sortorder, Item statisticsSection)
+    private static void EnsureItem([NotNull] ID itemId, [NotNull] string itemName, [NotNull] string title, string sortorder, [NotNull] Item statisticsSection)
     {
-      var thisType = typeof(InstallHook);
       var database = statisticsSection.Database;
       var item = database.GetItem(itemId);
       if (item != null)
       {
         return;
       }
+      
+      RemoveItem(
+        itemName: itemName,
+        statisticsSection: statisticsSection);
 
-      // update patch from version 8200 to 8201
-      item = statisticsSection.Children[itemName];
-      if (item != null)
-      {
-        Log.Audit($"Deleting item {statisticsSection.Paths.FullPath}/{itemName} ({item.ID}) to re-create - {thisType.Assembly.GetName().Name}", thisType);
-        item.Delete();
-      }
-
-      Log.Audit($"Creating item {statisticsSection.Paths.FullPath}/{itemName} ({itemId}) - {thisType.Assembly.GetName().Name}", thisType);
+      Log.Audit($"Creating item {statisticsSection.Paths.FullPath}/{itemName} ({itemId}) - {typeof(InstallHook).Assembly.GetName().Name}", typeof(InstallHook));
 
       item = statisticsSection.Add(itemName, new TemplateID(TemplateIDs.TemplateField), itemId);
       Assert.IsNotNull(item, $"Cannot find created item: {itemName} ({itemId})");
@@ -63,6 +62,19 @@
       item[FieldIDs.Sortorder] = sortorder;
       item[TemplateFieldIDs.Shared] = "1";
       item.Editing.EndEdit();
+    }
+
+    private static void RemoveItem([NotNull] string itemName, [NotNull] Item statisticsSection)
+    {
+      var item = statisticsSection.Children[itemName];
+      if (item == null)
+      {
+        return;
+      }
+
+      Log.Audit($"Deleting item {statisticsSection.Paths.FullPath}/{itemName} ({item.ID}) - {typeof(InstallHook).Assembly.GetName().Name}", typeof(InstallHook));
+
+      item.Delete();
     }
   }
 }
