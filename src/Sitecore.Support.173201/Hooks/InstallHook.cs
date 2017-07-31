@@ -35,6 +35,7 @@
 
     private static void EnsureItem(ID itemId, string itemName, string title, string sortorder, Item statisticsSection)
     {
+      var thisType = typeof(InstallHook);
       var database = statisticsSection.Database;
       var item = database.GetItem(itemId);
       if (item != null)
@@ -42,7 +43,6 @@
         return;
       }
 
-      var thisType = typeof(InstallHook);
       Log.Audit($"Creating item {statisticsSection.Paths.FullPath}/{itemName} ({itemId}) - {thisType.Assembly.GetName().Name}", thisType);
 
       item = statisticsSection.Add(itemName, new TemplateID(TemplateIDs.TemplateField), itemId);
