@@ -15,9 +15,6 @@
     [NotNull]
     public static ID FirstPublishedFieldID { get; } = GetIdSetting("Publishing.FirstPublishedDateFieldID", defaultValue: "{C27B433F-5537-44A0-9069-B83AE2E6D99C}");
 
-    [NotNull]
-    public static ID LastPublishedFieldID { get; } = GetIdSetting("Publishing.LastPublishedDateFieldID", defaultValue: "{224EEF10-88F6-4E20-9761-E167A15DD05F}");
-
     public override void Process(PublishItemContext context)
     {
       Assert.ArgumentNotNull(context, nameof(context));
@@ -44,7 +41,6 @@
           sourceItem[FirstPublishedFieldID] = targetItem?[FirstPublishedFieldID].EmptyToNull() ?? targetItem?[FieldIDs.Created].EmptyToNull() ?? utcNow;
         }
 
-        sourceItem[LastPublishedFieldID] = utcNow;
         sourceItem.Editing.EndEdit();
       }
     }

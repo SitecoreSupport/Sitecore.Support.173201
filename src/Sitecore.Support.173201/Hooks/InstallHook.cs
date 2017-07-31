@@ -30,13 +30,6 @@
           title: "Published First",
           sortorder: "1000",
           statisticsSection: statisticsSection);
-
-        EnsureItem(
-          itemId: UpdateStatistics.LastPublishedFieldID,
-          itemName: "__Published Last",
-          title: "Published Last",
-          sortorder: "1100",
-          statisticsSection: statisticsSection);
       }
     }
 
