@@ -13,7 +13,7 @@
   public class UpdateStatistics : PublishItemProcessor
   {
     [NotNull]
-    public static ID FirstPublishedFieldID { get; } = GetIdSetting("Publishing.FirstPublishedDateFieldID", defaultValue: "{C27B433F-5537-44A0-9069-B83AE2E6D99C}");
+    public static ID FirstPublishedFieldID { get; } = GetIdSetting("Publishing.FirstPublishedDateFieldID", defaultValue: "{A33753B4-02F9-49C4-AA72-5B4F5A5E279B}");
 
     public override void Process(PublishItemContext context)
     {

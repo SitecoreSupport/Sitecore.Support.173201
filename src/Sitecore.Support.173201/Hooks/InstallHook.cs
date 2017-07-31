@@ -43,6 +43,14 @@
         return;
       }
 
+      // update patch from version 8200 to 8201
+      item = statisticsSection.Children[itemName];
+      if (item != null)
+      {
+        Log.Audit($"Deleting item {statisticsSection.Paths.FullPath}/{itemName} ({item.ID}) to re-create - {thisType.Assembly.GetName().Name}", thisType);
+        item.Delete();
+      }
+
       Log.Audit($"Creating item {statisticsSection.Paths.FullPath}/{itemName} ({itemId}) - {thisType.Assembly.GetName().Name}", thisType);
 
       item = statisticsSection.Add(itemName, new TemplateID(TemplateIDs.TemplateField), itemId);
