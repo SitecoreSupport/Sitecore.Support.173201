@@ -32,15 +32,15 @@
         {
           return;
         }
-
-        var utcNow = DateUtil.ToIsoDate(DateTime.UtcNow);
+        
         var targetItem = context.PublishHelper.GetTargetItem(context.ItemId);
-        sourceItem.Editing.BeginEdit();
-        if (string.IsNullOrEmpty(sourceItem[FirstPublishedFieldID]))
+        if (!string.IsNullOrEmpty(sourceItem[FirstPublishedFieldID]))
         {
-          sourceItem[FirstPublishedFieldID] = targetItem?[FirstPublishedFieldID].EmptyToNull() ?? targetItem?[FieldIDs.Created].EmptyToNull() ?? utcNow;
+          return;
         }
 
+        sourceItem.Editing.BeginEdit();
+        sourceItem[FirstPublishedFieldID] = targetItem?[FirstPublishedFieldID].EmptyToNull() ?? targetItem?[FieldIDs.Created].EmptyToNull() ?? DateUtil.ToIsoDate(DateTime.UtcNow);
         sourceItem.Editing.EndEdit();
       }
     }

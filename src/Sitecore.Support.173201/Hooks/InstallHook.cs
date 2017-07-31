@@ -51,6 +51,7 @@
       item.Editing.BeginEdit();
       item["Type"] = "datetime";
       item["Title"] = title;
+      item["Default Value"] = "";
       item[FieldIDs.Sortorder] = sortorder;
       item[TemplateFieldIDs.Shared] = "1";
       item.Editing.EndEdit();
