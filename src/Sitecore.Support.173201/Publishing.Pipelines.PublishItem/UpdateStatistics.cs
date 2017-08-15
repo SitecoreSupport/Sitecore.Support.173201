@@ -37,6 +37,12 @@
         {
           return;
         }
+        
+        if (sourceItem.Paths.FullPath.StartsWith("/sitecore/templates/", StringComparison.OrdinalIgnoreCase))
+        {
+          // to prevent inheritance from standard values and branch templates
+          return;
+        }
 
         sourceItem.Editing.BeginEdit();
         var targetItem = context.PublishHelper.GetTargetItem(context.ItemId);
