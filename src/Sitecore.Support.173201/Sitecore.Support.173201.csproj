@@ -51,6 +51,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\ItemEventHandler.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Hooks\InstallHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
